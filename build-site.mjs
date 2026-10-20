@@ -9,7 +9,7 @@ const destination = 'https://anna-shopmy-closet.annanoellerinke.chatgpt.site';
 const escape = s => s.replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;');
 const anchors = collection => paintOrder.map(id => {
   const s = collection.find(s => s.id === id);
-  return `<a href="${s.url}" data-shelf="${id}" aria-label="${escape(s.name)} — shop the shelf" target="_self" rel="noopener noreferrer">
+  return `<a href="${s.url}" data-shelf="${id}" aria-label="${escape(s.name)} — shop the shelf (opens in a new tab)" target="_blank" rel="noopener noreferrer">
     <title>${escape(s.name)}</title>
     ${s.shapes.map(([item,d,type]) => `<path class="${type || 'piece'}" data-item="${escape(item)}" d="${d}"/>`).join('\n    ')}
     ${s.labels.map(([x,y,w,h])=>`<rect class="label" x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/>`).join('\n    ')}
@@ -34,14 +34,14 @@ const html = `<!doctype html>
   <meta property="og:image:alt" content="Anna’s wooden closet with clothes, shoes, accessories and handwritten shelf labels.">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=native-taps-5">
-  <script src="closet.js?v=native-taps-5" defer></script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="closet.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#shelf-list">Browse shelves as a list</a>
   <main>
     <h1 class="sr-only">ShopMy — Anna Noelle Rinke</h1>
-    <p class="sr-only" id="instructions">Tap a piece or its handwritten label to shop that shelf. Follow the link to shop on ShopMy. Browse all shelves opens a list of larger links.</p>
+    <p class="sr-only" id="instructions">Tap a piece or its handwritten label to shop that shelf. ShopMy links open in a new tab. Browse all shelves opens a list of larger links.</p>
     <div class="closet" aria-describedby="instructions">
       <picture>
         <source media="(min-width: 900px)" srcset="closet-desktop.png" width="1122" height="1402">
@@ -59,10 +59,10 @@ const html = `<!doctype html>
     <section class="shelf-directory" id="shelf-list" hidden aria-labelledby="directory-title" tabindex="-1">
       <h2 class="sr-only" id="directory-title">All ShopMy shelves</h2>
       <nav aria-label="All ShopMy shelves">
-        ${shelves.map(s=>`<a href="${s.url}" target="_self" rel="noopener noreferrer">${escape(s.name)} <span aria-hidden="true">↗</span></a>`).join('\n        ')}
+        ${shelves.map(s=>`<a href="${s.url}" target="_blank" rel="noopener noreferrer">${escape(s.name)} <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>`).join('\n        ')}
       </nav>
     </section>
-    <noscript><p class="no-script"><a href="https://shopmy.us/annanoellerinke/shelves" target="_self" rel="noopener noreferrer">Browse all shelves on ShopMy ↗</a></p></noscript>
+    <noscript><p class="no-script"><a href="https://shopmy.us/annanoellerinke/shelves" target="_blank" rel="noopener noreferrer">Browse all shelves on ShopMy ↗</a></p></noscript>
   </main>
 </body>
 </html>
