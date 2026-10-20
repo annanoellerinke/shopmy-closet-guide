@@ -20,58 +20,56 @@ if (location.hash === '#shelf-list') openDirectory();
 // never edited, and the overlay disappears completely when the wiggle ends.
 const photo = document.querySelector('.closet-photo');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const svgNamespace = 'http://www.w3.org/2000/svg';
 let shopping = false;
 
-function svgElement(name, attributes = {}) {
-  const element = document.createElementNS(svgNamespace, name);
-  for (const [key, value] of Object.entries(attributes)) element.setAttribute(key, value);
-  return element;
-}
-
-async function wigglePiece(piece, map) {
-  const overlay = svgElement('svg', {
-    class: 'piece-wiggle', viewBox: map.getAttribute('viewBox'),
-    'aria-hidden': 'true', focusable: 'false'
-  });
+async function wigglePiece(piece) {
+  const map = piece.closest('svg');
   const { width, height } = map.viewBox.baseVal;
-  const mask = svgElement('mask', {
-    id: 'tapped-piece-mask', maskUnits: 'userSpaceOnUse', x: 0, y: 0, width, height
-  });
   const pieces = [piece];
-  const item = piece.dataset.item;
-  if (item === 'Fawn hanging tote' || item === 'Hanging tote straps') {
+  if (['Fawn hanging tote', 'Hanging tote straps'].includes(piece.dataset.item)) {
     pieces.splice(0, 1, ...piece.closest('a').querySelectorAll('[data-item="Fawn hanging tote"], [data-item="Hanging tote straps"]'));
   }
+  const boxes = pieces.map(region => region.getBBox());
+  const x = Math.max(0, Math.floor(Math.min(...boxes.map(b => b.x)) - 5));
+  const y = Math.max(0, Math.floor(Math.min(...boxes.map(b => b.y)) - 5));
+  const right = Math.min(width, Math.ceil(Math.max(...boxes.map(b => b.x + b.width)) + 5));
+  const bottom = Math.min(height, Math.ceil(Math.max(...boxes.map(b => b.y + b.height)) + 5));
+  const overlay = document.createElement('canvas');
+  overlay.className = 'piece-wiggle';
+  overlay.setAttribute('aria-hidden', 'true');
+  overlay.width = right - x;
+  overlay.height = bottom - y;
+  overlay.style.cssText = `left:${x / width * 100}%;top:${y / height * 100}%;width:${overlay.width / width * 100}%;height:${overlay.height / height * 100}%;transform-origin:50% 25%`;
+  const context = overlay.getContext('2d');
+  context.translate(-x, -y);
+  context.fillStyle = context.strokeStyle = '#fff';
+  context.lineWidth = 7;
+  context.lineCap = 'round';
   for (const region of pieces) {
-    const wire = region.classList.contains('wire');
-    mask.append(svgElement('path', {
-      d: region.getAttribute('d'), fill: wire ? 'none' : 'white',
-      stroke: wire ? 'white' : 'none', 'stroke-width': 7, 'stroke-linecap': 'round'
-    }));
+    const path = new Path2D(region.getAttribute('d'));
+    if (region.classList.contains('wire')) context.stroke(path);
+    else context.fill(path);
   }
-  const definitions = svgElement('defs');
-  definitions.append(mask);
-  const moving = svgElement('g');
-  const cutout = svgElement('g', { mask: 'url(#tapped-piece-mask)' });
-  cutout.append(svgElement('image', { href: photo.currentSrc, width, height }));
-  moving.append(cutout);
-  overlay.append(definitions, moving);
-  photo.closest('.closet').append(overlay);
-  const box = piece.getBBox();
-  moving.style.transformOrigin = `${box.x + box.width / 2}px ${box.y + box.height * 0.25}px`;
-  document.querySelector('.closet').classList.add('is-wiggling');
+  // Draw from the already-decoded photograph, not a newly loaded SVG image.
+  context.globalCompositeOperation = 'source-in';
+  context.drawImage(photo, 0, 0, width, height);
+  const closet = photo.closest('.closet');
+  closet.append(overlay);
+  closet.classList.add('is-wiggling');
   try {
-    await moving.animate([
-      { transform: 'rotate(0deg) scale(1)' },
-      { transform: 'rotate(-0.8deg) scale(1.012)', offset: 0.22 },
-      { transform: 'rotate(0.7deg) scale(1.012)', offset: 0.47 },
-      { transform: 'rotate(-0.35deg) scale(1.006)', offset: 0.72 },
-      { transform: 'rotate(0deg) scale(1)' }
-    ], { duration: 340, easing: 'ease-in-out' }).finished;
+    // Give the painted cutout a frame on screen before beginning the movement.
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    await overlay.animate([
+      { transform: 'translate(0, 0) rotate(0deg) scale(1)', offset: 0 },
+      { transform: 'translate(-3px, -2px) rotate(-2.5deg) scale(1.045)', offset: 0.2 },
+      { transform: 'translate(3px, -2px) rotate(2.2deg) scale(1.045)', offset: 0.44 },
+      { transform: 'translate(-2px, -1px) rotate(-1.3deg) scale(1.025)', offset: 0.66 },
+      { transform: 'translate(1px, 0) rotate(0.6deg) scale(1.01)', offset: 0.82 },
+      { transform: 'translate(0, 0) rotate(0deg) scale(1)', offset: 1 }
+    ], { duration: 620, easing: 'linear' }).finished;
   } finally {
     overlay.remove();
-    document.querySelector('.closet').classList.remove('is-wiggling');
+    closet.classList.remove('is-wiggling');
   }
 }
 
@@ -96,14 +94,14 @@ document.querySelectorAll('.shelf-map').forEach(map => {
     const link = event.target.closest('a');
     if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || reducedMotion.matches) return;
     const piece = event.target.closest('path[data-item]') || link.querySelector('path[data-item]');
-    if (!piece || !photo.complete || !photo.naturalWidth || !Element.prototype.animate) return;
+    if (!piece || !photo.complete || !photo.naturalWidth || !Element.prototype.animate || !window.Path2D) return;
     event.preventDefault();
     if (shopping) return;
     shopping = true;
     try {
-      await wigglePiece(piece, map);
+      await wigglePiece(piece);
     } catch {
-      // Shopping still works if this browser cannot animate the SVG overlay.
+      // Shopping still works if this browser cannot animate the cutout.
     } finally {
       shopping = false;
       openShelf(link.getAttribute('href'));
