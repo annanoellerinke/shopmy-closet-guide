@@ -53,7 +53,7 @@ Then put that link in your bio.
 
 **This example contains my name, images, and links.** Ask your agent to replace them with yours, including the title and sharing preview. The clickable outlines fit these exact images; a new composition needs a new map. No font files are included; use fonts and images you have permission to publish.
 
-For someone working with the code: run `node build-site.mjs` after editing the maps or generator. The checked-in `index.html` can also be served directly. Desktop switches at **900px**. The two maps are independent; the hidden one is excluded from keyboard navigation. `closet.js` opens the shelf list, while the shopping links are ordinary links that work without JavaScript.
+For someone working with the code: run `node build-site.mjs` after editing the maps or generator. The checked-in `index.html` can also be served directly. Desktop switches at **900px**. The two maps are independent; the hidden one is excluded from keyboard navigation. `closet.js` opens the shelf list and gives a tapped piece a gentle 340ms wiggle before opening its shelf. Reduced-motion preferences skip the animation. Modified clicks and the text directory keep normal link behavior, and the shopping links still work without JavaScript.
 
 The Vercel output directory is this repository's root, so keep it limited to intended public files. Keep credentials, hosting account IDs, and private references elsewhere. Anna's live example is hosted on ChatGPT Sites; copying this repository does not connect to or deploy over it.
 

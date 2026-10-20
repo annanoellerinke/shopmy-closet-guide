@@ -66,6 +66,8 @@ Use ordinary anchors with clear accessible names, visible keyboard focus, and ap
 
 In this example, the handwritten “Browse all shelves” has an overlaid button with `aria-expanded` and `aria-controls`. It opens the list below the image. The item links work without JavaScript; a `<noscript>` link also opens the user's ShopMy shelves. Update that fallback for the new creator.
 
+The example gives the tapped piece a gentle 340ms wiggle before opening its shelf. It uses a temporary, masked copy of the same image, then removes that overlay completely. The image itself is unchanged. Labels animate a representative piece; the hanging tote and straps move together. Reduced-motion preferences, modified clicks, and the text directory keep normal link behavior. If a browser blocks the delayed new tab, the shelf opens in the current tab. Keep motion optional and subtle.
+
 Do not add unrequested analytics or integrations. If adding motion, respect reduced-motion settings.
 
 ### Personalize the files
