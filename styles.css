@@ -1,0 +1,41 @@
+:root { color-scheme: light; font-family: Georgia, 'Times New Roman', serif; color: #24211e; background: #fff; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; }
+main { width: 100%; margin: 0; }
+.closet { position: relative; width: 100%; }
+.closet picture { display: block; }
+.closet-photo { display: block; width: 100%; height: auto; user-select: none; }
+.shelf-map { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.map-desktop { display: none; }
+.shelf-map a { cursor: pointer; outline: none; }
+.piece, .label { fill: transparent; stroke: transparent; stroke-width: 1.5px; vector-effect: non-scaling-stroke; pointer-events: all; }
+.wire { fill: none; stroke: transparent; stroke-width: 15px; pointer-events: stroke; }
+.shelf-map a:focus-visible .piece, .shelf-map a:focus-visible .label { stroke: #fff7e8; fill: #ffffff18; filter: drop-shadow(0 0 2px #382410); }
+.shelf-map a:focus-visible .wire { stroke: #ffffff88; }
+@media (hover: hover) and (pointer: fine) {
+  .shelf-map a:hover .piece { fill: #ffffff12; stroke: #fff7e850; }
+  .shelf-map a:hover .label { fill: #ffffff20; }
+  .shelf-map a:hover .wire { stroke: #ffffff35; }
+}
+.shelf-map a:active .piece { fill: #ffffff25; }
+.browse-toggle { position: absolute; left: 37.5%; top: 94.6%; width: 25%; height: 4.3%; min-height: 44px; border: 0; border-radius: 5px; padding: 0; color: inherit; background: transparent; cursor: pointer; }
+.browse-toggle:focus-visible { outline: 2px solid #fff7e8; outline-offset: -3px; background: #ffffff15; }
+@media (min-width: 900px) {
+  .map-mobile { display: none; }
+  .map-desktop { display: block; }
+  .browse-toggle { left: 40%; top: 92.4%; width: 22%; height: 4%; }
+}
+.shelf-directory { width: min(calc(100% - 40px), 540px); margin: 8px auto 0; padding-bottom: max(24px, env(safe-area-inset-bottom)); scroll-margin-top: 12px; }
+[hidden] { display: none !important; }
+.shelf-directory nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; }
+.shelf-directory nav a { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 50px; color: inherit; font-size: 14px; line-height: 1.35; text-decoration: none; border-bottom: 1px solid #eae8e5; }
+.shelf-directory nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.shelf-directory nav a > span[aria-hidden] { color: #81796f; }
+.shelf-directory :focus-visible { outline: 2px solid #725c47; outline-offset: 3px; }
+.shelf-directory:focus { outline: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.skip-link { position: absolute; z-index: 2; left: 12px; top: -100px; padding: 12px 16px; background: #fff; color: #24211e; }
+.skip-link:focus { top: 12px; }
+.no-script { text-align: center; padding: 12px; }
+.no-script a { color: inherit; }
+@media (forced-colors: active) { .shelf-map a:focus-visible .piece, .shelf-map a:focus-visible .label, .shelf-map a:focus-visible .wire { stroke: LinkText; fill: transparent; } .browse-toggle:focus-visible { outline-color: LinkText; } }
