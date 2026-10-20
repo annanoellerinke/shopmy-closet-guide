@@ -62,11 +62,11 @@ Prefer a simple implementation. This starter is static HTML/CSS with SVG links a
 
 ### Make the interactions accessible
 
-Use ordinary anchors with clear accessible names, visible keyboard focus, and appropriate `rel` attributes for new-tab links. Tell screen-reader users that shelves open in a new tab. Provide a page heading, short instruction, a skip link, and a readable directory.
+Use ordinary anchors with clear accessible names, visible keyboard focus, and appropriate `rel` attributes for new-tab links. The example opens shelves in the same tab; users can use Back to return to the closet. If you choose a different behavior, describe it accurately for screen-reader users. Provide a page heading, short instruction, a skip link, and a readable directory.
 
 In this example, the handwritten “Browse all shelves” has an overlaid button with `aria-expanded` and `aria-controls`. It opens the list below the image. The item links work without JavaScript; a `<noscript>` link also opens the user's ShopMy shelves. Update that fallback for the new creator.
 
-The example gives the tapped piece a gentle 620ms wiggle before opening its shelf. It uses a temporary canvas cutout drawn from the already-loaded image, then removes that overlay completely. The image itself is unchanged. Labels animate a representative piece; the hanging tote and straps move together. Reduced-motion preferences, modified clicks, and the text directory keep normal link behavior. After the animation, activate a direct HTTPS anchor with the original target and rel attributes. Avoid opening a blank tab and redirecting it, which can change how phones handle app links. App-opening prompts can also depend on the browser and installed apps; verify on the intended phone. Keep motion optional and subtle.
+The example gives the tapped piece a gentle 620ms wiggle before opening its shelf. It uses a temporary canvas cutout drawn from the already-loaded image, then removes that overlay completely. The image itself is unchanged. Labels animate a representative piece; the hanging tote and straps move together. Reduced-motion preferences, modified clicks, and the text directory keep normal link behavior. After the animation, navigate the current tab with `window.location.assign` using the original shelf URL. Do not open a new tab after awaiting the animation: Safari can block that delayed popup. Ordinary fallback anchors also use the same tab, so reduced-motion and no-JavaScript visits behave consistently. App-opening prompts can also depend on the browser and installed apps; verify on the intended phone. Keep motion optional and subtle.
 
 Do not add unrequested analytics or integrations. If adding motion, respect reduced-motion settings.
 

@@ -74,19 +74,9 @@ async function wigglePiece(piece) {
 }
 
 function openShelf(sourceLink) {
-  // Keep the original direct HTTPS anchor navigation. Opening a blank window
-  // and redirecting it can invoke a different app-opening flow on phones.
-  const destination = document.createElement('a');
-  destination.href = sourceLink.getAttribute('href');
-  destination.target = sourceLink.getAttribute('target') || '_blank';
-  destination.rel = sourceLink.getAttribute('rel') || 'noopener noreferrer';
-  destination.hidden = true;
-  document.body.append(destination);
-  try {
-    destination.click();
-  } finally {
-    destination.remove();
-  }
+  // After awaiting the animation, Safari may block opening a new tab.
+  // Navigate this tab instead; Back returns to the unchanged closet.
+  window.location.assign(sourceLink.getAttribute('href'));
 }
 
 document.querySelectorAll('.shelf-map').forEach(map => {
