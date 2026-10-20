@@ -73,19 +73,19 @@ async function wigglePiece(piece) {
   }
 }
 
-function openShelf(url) {
-  // Open only after the motion, so visitors see the wiggle before leaving.
-  // A same-tab fallback still reaches the shelf if a browser blocks the popup.
-  const destination = window.open('about:blank', '_blank');
-  if (destination) {
-    destination.opener = null;
-    const policy = destination.document.createElement('meta');
-    policy.name = 'referrer';
-    policy.content = 'no-referrer';
-    destination.document.head.append(policy);
-    destination.location.replace(url);
-  } else {
-    window.location.assign(url);
+function openShelf(sourceLink) {
+  // Keep the original direct HTTPS anchor navigation. Opening a blank window
+  // and redirecting it can invoke a different app-opening flow on phones.
+  const destination = document.createElement('a');
+  destination.href = sourceLink.getAttribute('href');
+  destination.target = sourceLink.getAttribute('target') || '_blank';
+  destination.rel = sourceLink.getAttribute('rel') || 'noopener noreferrer';
+  destination.hidden = true;
+  document.body.append(destination);
+  try {
+    destination.click();
+  } finally {
+    destination.remove();
   }
 }
 
@@ -104,7 +104,7 @@ document.querySelectorAll('.shelf-map').forEach(map => {
       // Shopping still works if this browser cannot animate the cutout.
     } finally {
       shopping = false;
-      openShelf(link.getAttribute('href'));
+      openShelf(link);
     }
   });
 });

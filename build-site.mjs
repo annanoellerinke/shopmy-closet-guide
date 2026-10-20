@@ -34,8 +34,8 @@ const html = `<!doctype html>
   <meta property="og:image:alt" content="Anna’s wooden closet with clothes, shoes, accessories and handwritten shelf labels.">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=wiggle-2">
-  <script src="closet.js?v=wiggle-2" defer></script>
+  <link rel="stylesheet" href="styles.css?v=direct-links-3">
+  <script src="closet.js?v=direct-links-3" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#shelf-list">Browse shelves as a list</a>
