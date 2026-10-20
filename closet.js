@@ -20,7 +20,7 @@ if (location.hash === '#shelf-list') openDirectory();
 // never edited, and the overlay disappears completely when the wiggle ends.
 const photo = document.querySelector('.closet-photo');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-let shopping = false;
+let wiggling = false;
 
 async function wigglePiece(piece) {
   const map = piece.closest('svg');
@@ -57,8 +57,6 @@ async function wigglePiece(piece) {
   closet.append(overlay);
   closet.classList.add('is-wiggling');
   try {
-    // Give the painted cutout a frame on screen before beginning the movement.
-    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     await overlay.animate([
       { transform: 'translate(0, 0) rotate(0deg) scale(1)', offset: 0 },
       { transform: 'translate(-3px, -2px) rotate(-2.5deg) scale(1.045)', offset: 0.2 },
@@ -73,28 +71,26 @@ async function wigglePiece(piece) {
   }
 }
 
-function openShelf(sourceLink) {
-  // After awaiting the animation, Safari may block opening a new tab.
-  // Navigate this tab instead; Back returns to the unchanged closet.
-  window.location.assign(sourceLink.getAttribute('href'));
-}
-
 document.querySelectorAll('.shelf-map').forEach(map => {
-  map.addEventListener('click', async event => {
+  const startWiggle = async event => {
     const link = event.target.closest('a');
-    if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || reducedMotion.matches) return;
+    if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || reducedMotion.matches || wiggling) return;
+    if (event.type === 'pointerdown' && (event.button !== 0 || event.isPrimary === false)) return;
+    if (event.type === 'keydown' && (event.key !== 'Enter' || event.repeat)) return;
     const piece = event.target.closest('path[data-item]') || link.querySelector('path[data-item]');
     if (!piece || !photo.complete || !photo.naturalWidth || !Element.prototype.animate || !window.Path2D) return;
-    event.preventDefault();
-    if (shopping) return;
-    shopping = true;
+    wiggling = true;
     try {
       await wigglePiece(piece);
     } catch {
-      // Shopping still works if this browser cannot animate the cutout.
+      // Motion is optional; the native shopping link is never intercepted.
     } finally {
-      shopping = false;
-      openShelf(link);
+      wiggling = false;
     }
-  });
+  };
+  // Start feedback on press. Leave the click entirely native so iOS can hand
+  // the ShopMy universal link to its app while the user's gesture is active.
+  // Do not delay, preventDefault, synthesize clicks, or script the navigation.
+  map.addEventListener('pointerdown', startWiggle, { passive: true });
+  map.addEventListener('keydown', startWiggle);
 });

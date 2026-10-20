@@ -34,14 +34,14 @@ const html = `<!doctype html>
   <meta property="og:image:alt" content="Anna’s wooden closet with clothes, shoes, accessories and handwritten shelf labels.">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=same-tab-4">
-  <script src="closet.js?v=same-tab-4" defer></script>
+  <link rel="stylesheet" href="styles.css?v=native-taps-5">
+  <script src="closet.js?v=native-taps-5" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#shelf-list">Browse shelves as a list</a>
   <main>
     <h1 class="sr-only">ShopMy — Anna Noelle Rinke</h1>
-    <p class="sr-only" id="instructions">Tap a piece or its handwritten label to shop that shelf. ShopMy links open in this tab; use Back to return to the closet. Browse all shelves opens a list of larger links.</p>
+    <p class="sr-only" id="instructions">Tap a piece or its handwritten label to shop that shelf. Follow the link to shop on ShopMy. Browse all shelves opens a list of larger links.</p>
     <div class="closet" aria-describedby="instructions">
       <picture>
         <source media="(min-width: 900px)" srcset="closet-desktop.png" width="1122" height="1402">
@@ -59,7 +59,7 @@ const html = `<!doctype html>
     <section class="shelf-directory" id="shelf-list" hidden aria-labelledby="directory-title" tabindex="-1">
       <h2 class="sr-only" id="directory-title">All ShopMy shelves</h2>
       <nav aria-label="All ShopMy shelves">
-        ${shelves.map(s=>`<a href="${s.url}" target="_self" rel="noopener noreferrer">${escape(s.name)} <span aria-hidden="true">↗</span><span class="sr-only"></span></a>`).join('\n        ')}
+        ${shelves.map(s=>`<a href="${s.url}" target="_self" rel="noopener noreferrer">${escape(s.name)} <span aria-hidden="true">↗</span></a>`).join('\n        ')}
       </nav>
     </section>
     <noscript><p class="no-script"><a href="https://shopmy.us/annanoellerinke/shelves" target="_self" rel="noopener noreferrer">Browse all shelves on ShopMy ↗</a></p></noscript>
