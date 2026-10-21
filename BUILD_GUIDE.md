@@ -2,7 +2,7 @@
 
 This is a brief for Codex, Claude Code, or another coding agent. Help the person create a website where objects and labels in a closet scene open their chosen ShopMy shelves. Explain decisions in ordinary language and handle the code and files for them.
 
-**Working example:** https://anna-shopmy-closet.annanoellerinke.chatgpt.site/
+**Working example:** https://anna-shopmy-closet.vercel.app/
 
 **Example source and worksheet:** https://github.com/annanoellerinke/shopmy-closet-guide
 
@@ -66,6 +66,8 @@ Use ordinary anchors with clear accessible names, visible keyboard focus, and ap
 
 In this example, the handwritten “Browse all shelves” has an overlaid button with `aria-expanded` and `aria-controls`. It opens the list below the image. The item links work without JavaScript; a `<noscript>` link also opens the user's ShopMy shelves. Update that fallback for the new creator.
 
+Preserve native shopping links. This version has no jiggle, delayed navigation, popup code, or redirect page. Keep each ShopMy destination on an ordinary anchor; the script only handles the shelf directory. Whether a phone opens the ShopMy app is controlled by the device, browser, and ShopMy. Verify on the person's phone before claiming app handoff works.
+
 Do not add unrequested analytics or integrations. If adding motion, respect reduced-motion settings.
 
 ### Personalize the files
@@ -99,12 +101,24 @@ Report any destination or interaction you couldn't verify. Don't claim automatic
 
 ## 6. Publish the person's own version
 
-Prepare and check the site first. Publish when the person requests it, using the hosting method available in their environment. A direct instruction to publish is authorization; don't add another confirmation step. Create a separate project and repository for a new creator rather than deploying over Anna's example.
+Prepare and check the site first. Publish when the person requests it. A direct instruction to publish is authorization; don't add another confirmation step. Create a separate GitHub repository and Vercel project for a new creator rather than deploying over Anna's example. Walk the person through sign-in if needed and handle file preparation for them.
 
-This repository includes an optional `vercel.json` for static hosting from the repository root. No build command is required because generated `index.html` is included. If the generator changes, run it before publishing. Keep the root limited to intended public content and store credentials in private provider settings.
+### Connect GitHub to Vercel
 
-For ChatGPT Sites, register the creator's own Site and configure the intended static output through the supported Sites workflow. This example deliberately includes no Sites identity or deployment credentials. Anna's live demo uses Sites; the repository can also be deployed to another static host.
+1. Save the intended website files in the creator's own GitHub repository. Include the generated `index.html`, images, styles, script, maps, generator, and `vercel.json`. Keep credentials and private references out of the repository.
+2. In Vercel, choose **Add New → Project**, then import that repository. Choose a new project name.
+3. Use **Other** for the application/framework preset and **./** for the root directory. Leave the build command empty and set the output directory to **.**. This starter's `vercel.json` already supplies those build/output settings. It needs no environment variables or package installation.
+4. Select **Deploy**. Wait for a successful deployment and use the stable production address Vercel provides, rather than a temporary preview address.
+5. Put that production address in `destination` in `build-site.mjs`, run `node build-site.mjs`, and save both files to GitHub. This updates the canonical URL and sharing-image address. Update the guide's example link too. Confirm the resulting Vercel deployment succeeds.
 
-Walk the person through sign-in if necessary. Don't require manual folder creation or file uploads when you can do that work for them. If they request GitHub publication, upload only the sanitized guide and intended source. Don't invent an open-source license or transfer rights to third-party assets.
+No build runs on Vercel for this starter because `index.html` is already included. **Whenever the generator or shelf maps change, run `node build-site.mjs` locally and commit the regenerated `index.html` too.** See [Vercel's build configuration documentation](https://vercel.com/docs/builds/configure-a-build) for these static-site settings.
 
-Confirm deployment success, open the final public URL without authentication, and verify that it serves the correct images and shelf destinations. Give the person the link. Explain that future image or destination changes require an update and redeployment.
+### Verify and maintain the live site
+
+Open the final public URL without authentication and verify that it serves the correct desktop and mobile images, shelf destinations, and sharing metadata. Check the shelf directory and native links. Report any physical-phone behavior you couldn't test. Give the person the public link once the deployment is confirmed.
+
+With the repository connected, commits to its production branch (`main` in Anna's example) automatically deploy to the same Vercel address. Local edits alone do not publish anything. For later changes, update the files, regenerate the page when needed, commit to GitHub, and wait for Vercel to report success before calling the update live. Preserve the approved artwork unless the person requests a design change.
+
+Anna's project is **anna-shopmy-closet**, connected to **annanoellerinke/shopmy-closet-guide**. Its public address is **https://anna-shopmy-closet.vercel.app/**. The [earlier ChatGPT Sites address](https://anna-shopmy-closet.annanoellerinke.chatgpt.site/) remains a separate copy; GitHub commits do not automatically publish to Sites. Copying this repository does not connect to either hosting account.
+
+The output directory is the repository root, so keep every root file suitable for public access. Upload only the intended source and guide; don't invent an open-source license or transfer rights to third-party assets.

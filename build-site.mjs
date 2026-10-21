@@ -5,7 +5,7 @@ import { shelves, paintOrder } from './shelves.mjs';
 import { desktopShelves } from './desktop-shelves.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
-const destination = 'https://anna-shopmy-closet.annanoellerinke.chatgpt.site';
+const destination = 'https://anna-shopmy-closet.vercel.app';
 const escape = s => s.replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;');
 const anchors = collection => paintOrder.map(id => {
   const s = collection.find(s => s.id === id);

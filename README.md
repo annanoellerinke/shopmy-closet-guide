@@ -2,7 +2,7 @@
 
 Your ShopMy can look like a closet full of your favorite things. People tap a piece or its handwritten label and land on the shelf you chose.
 
-I made mine into a wooden wardrobe, with a built-in version for desktop and a closer view on phones. **[See my website here](https://anna-shopmy-closet.annanoellerinke.chatgpt.site/).** This repo includes the working example and a guide to help you make your own.
+I made mine into a wooden wardrobe, with a built-in version for desktop and a closer view on phones. **[See my website here](https://anna-shopmy-closet.vercel.app/).** This repo includes the working example and a guide to help you make your own.
 
 You don't need to know how to code!!!
 
@@ -32,9 +32,11 @@ Give feedback in plain language: “make the side panels narrower,” “keep th
 
 Copy and paste:
 
-> Publish my finished website at a new public link. Use Vercel, or the hosting available in this app, and walk me through any sign-in steps. Check every item and label on desktop and mobile, including the shelf list. Give me the public link when it's live. If you publish the source to my GitHub, create a separate repository for my version.
+> Save my finished website in a new repository in my GitHub, then connect it to a new Vercel project and publish it. Walk me through any sign-in steps. Keep my approved design and shopping links exactly as they are. Check every item and label on desktop and mobile, including the shelf list. Update the page's sharing preview and instructions with my new public link, then give me that link when it's live.
 
-Then put that link in your bio.
+GitHub stores your website's files; Vercel puts them online. Once they're connected, updates saved to the repository's main branch automatically deploy to the same website link. Ask your agent to make and publish future changes for you.
+
+Then put that link in your bio. **[The exact Vercel setup is in the build guide](BUILD_GUIDE.md#6-publish-the-persons-own-version).**
 
 ---
 
@@ -49,13 +51,15 @@ Then put that link in your bio.
 | [shelves.mjs](shelves.mjs) | Example shelf URLs, mobile item outlines, and label targets. |
 | [desktop-shelves.mjs](desktop-shelves.mjs) | Separate desktop outlines using the same destinations. |
 | [build-site.mjs](build-site.mjs) | Generates the page from both shelf maps. |
-| [favicon.svg](favicon.svg), [vercel.json](vercel.json) | The icon and optional Vercel hosting configuration. |
+| [favicon.svg](favicon.svg), [vercel.json](vercel.json) | The icon and Vercel hosting configuration. |
 
 **This example contains my name, images, and links.** Ask your agent to replace them with yours, including the title and sharing preview. The clickable outlines fit these exact images; a new composition needs a new map. No font files are included; use fonts and images you have permission to publish.
 
 For someone working with the code: run `node build-site.mjs` after editing the maps or generator. The checked-in `index.html` can also be served directly. Desktop switches at **900px**. The two maps are independent; the hidden one is excluded from keyboard navigation. `closet.js` opens the shelf list, while the shopping links are ordinary links that work without JavaScript.
 
-The Vercel output directory is this repository's root, so keep it limited to intended public files. Keep credentials, hosting account IDs, and private references elsewhere. Anna's live example is hosted on ChatGPT Sites; copying this repository does not connect to or deploy over it.
+The Vercel output directory is this repository's root, so keep it limited to intended public files. Keep credentials, hosting account IDs, and private references elsewhere. Anna's Vercel project is connected to this repository's `main` branch. Create your own repository and Vercel project for your version.
+
+The [earlier ChatGPT Sites link](https://anna-shopmy-closet.annanoellerinke.chatgpt.site/) remains a separate published copy. GitHub updates deploy to Vercel; they do not automatically update that Sites copy.
 
 Prefer the suitcase? **[That guide is here](https://github.com/annanoellerinke/shopmy-website-guide).**
 
